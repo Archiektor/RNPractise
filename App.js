@@ -2,6 +2,7 @@ import {useState} from 'react'
 import {Button, FlatList, StyleSheet, View} from 'react-native';
 import {GoalItem} from './components/goalItem';
 import GoalInput from './components/goalInput';
+import {StatusBar} from 'expo-status-bar';
 
 export default function App() {
     const [modalIsVisible, setModalIsVisible] = useState(false);
@@ -24,34 +25,39 @@ export default function App() {
         setModalIsVisible(false);
     }
 
-    return (<View style={styles.appContainer}>
-        <Button title={'Add New Goal'} color={'#6245b6'} onPress={startAddGoalHandler}/>
-        <View style={styles.upperContainer}>
-            <GoalInput isVisible={modalIsVisible} goalAddHandler={goalAddHandler} closeModalHandler={closeModalHandler}/>
-        </View>
-        <View style={styles.downContainer}>
-            <FlatList
-                data={courseGoals}
-                renderItem={itemData => (<GoalItem itemData={itemData} deleteItemHandler={goalDeleteHandler}/>)}
-                // if we have item like obj {text: 'bla-bla', id: '343s-45aa-67ff'}
-                // we can extract key by return item.id
-                keyExtractor={(item, index) => index.toString()}
-            />
-            {/*{courseGoals.length > 0 ? (*/}
-            {/*    <ScrollView>*/}
-            {/*        {courseGoals.map((goal, idx) => (*/}
-            {/*            <View key={idx} style={styles.dummyItem}>*/}
-            {/*                <Text style={styles.dummyText}>{goal}</Text>*/}
-            {/*            </View>*/}
-            {/*        ))}*/}
-            {/*    </ScrollView>*/}
-            {/*) : (*/}
-            {/*    <View>*/}
-            {/*        <Text style={styles.dummyItem}>No goals added yet.</Text>*/}
-            {/*    </View>*/}
-            {/*)}*/}
-        </View>
-    </View>);
+    return (
+        <>
+            <StatusBar style={'light'}/>
+            <View style={styles.appContainer}>
+                <Button title={'Add New Goal'} color={'#ccc2ea'} onPress={startAddGoalHandler}/>
+                <View style={styles.upperContainer}>
+                    <GoalInput isVisible={modalIsVisible} goalAddHandler={goalAddHandler} closeModalHandler={closeModalHandler}/>
+                </View>
+                <View style={styles.downContainer}>
+                    <FlatList
+                        data={courseGoals}
+                        renderItem={itemData => (<GoalItem itemData={itemData} deleteItemHandler={goalDeleteHandler}/>)}
+                        // if we have item like obj {text: 'bla-bla', id: '343s-45aa-67ff'}
+                        // we can extract key by return item.id
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                    {/*{courseGoals.length > 0 ? (*/}
+                    {/*    <ScrollView>*/}
+                    {/*        {courseGoals.map((goal, idx) => (*/}
+                    {/*            <View key={idx} style={styles.dummyItem}>*/}
+                    {/*                <Text style={styles.dummyText}>{goal}</Text>*/}
+                    {/*            </View>*/}
+                    {/*        ))}*/}
+                    {/*    </ScrollView>*/}
+                    {/*) : (*/}
+                    {/*    <View>*/}
+                    {/*        <Text style={styles.dummyItem}>No goals added yet.</Text>*/}
+                    {/*    </View>*/}
+                    {/*)}*/}
+                </View>
+            </View>
+        </>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -59,7 +65,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 35,
         paddingHorizontal: 12,
-        backgroundColor: '#cccccc',
+        backgroundColor: '#2c3e50',
     },
     upperContainer: {
         flex: 1,
