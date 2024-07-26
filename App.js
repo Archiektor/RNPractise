@@ -1,42 +1,42 @@
 import {useState} from 'react'
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
 import {GoalItem} from './components/goalItem';
-import CustomButton from './components/customButton';
 import GoalInput from './components/goalInput';
 
 export default function App() {
-    const [goal, setGoal] = useState('');
+    const [modalIsVisible, setModalIsVisible] = useState(false);
     const [courseGoals, setCourseGoals] = useState([]);
 
-
-    const goalInputHandler = (text) => {
-        //console.log(text);
-        setGoal(text);
+    const startAddGoalHandler = () => {
+        setModalIsVisible(true);
     }
 
-    const goalAddHandler = () => {
+    const goalAddHandler = (goal) => {
         if (goal.trim().length === 0) return; // Prevent adding empty goals
         setCourseGoals(currentGoals => [...currentGoals, goal]);
-        setGoal(''); // Clear the input after adding the goal
+    }
+
+    const goalDeleteHandler = (itemToDelete) => {
+        setCourseGoals(currentGoals => currentGoals.filter(g => g !== itemToDelete));
+    }
+
+    const closeModalHandler = () => {
+        setModalIsVisible(false);
     }
 
     return (<View style={styles.appContainer}>
+        <Button title={'Add New Goal'} color={'#6245b6'} onPress={startAddGoalHandler}/>
         <View style={styles.upperContainer}>
-            <GoalInput goal={goal} goalInputHandler={goalInputHandler}/>
-            <CustomButton clickHandler={goalAddHandler}/>
+            <GoalInput isVisible={modalIsVisible} goalAddHandler={goalAddHandler} closeModalHandler={closeModalHandler}/>
         </View>
         <View style={styles.downContainer}>
-            {courseGoals.length > 0 ? (
-                <FlatList
-                    data={courseGoals}
-                    renderItem={itemData => (<GoalItem itemData={itemData}/>)}
-                    // if we have item like obj {text: 'bla-bla', id: '343s-45aa-67ff'}
-                    // we can extract key by return item.id
-                    keyExtractor={(item, index) => index.toString()}
-                />
-            ) : (
-                <View><Text style={styles.dummyItem}>No goals added yet.</Text></View>
-            )}
+            <FlatList
+                data={courseGoals}
+                renderItem={itemData => (<GoalItem itemData={itemData} deleteItemHandler={goalDeleteHandler}/>)}
+                // if we have item like obj {text: 'bla-bla', id: '343s-45aa-67ff'}
+                // we can extract key by return item.id
+                keyExtractor={(item, index) => index.toString()}
+            />
             {/*{courseGoals.length > 0 ? (*/}
             {/*    <ScrollView>*/}
             {/*        {courseGoals.map((goal, idx) => (*/}
@@ -56,13 +56,15 @@ export default function App() {
 
 const styles = StyleSheet.create({
     appContainer: {
-        paddingTop: 35, paddingHorizontal: 12, backgroundColor: '#cccccc', flex: 1,
+        flex: 1,
+        paddingTop: 35,
+        paddingHorizontal: 12,
+        backgroundColor: '#cccccc',
     },
     upperContainer: {
-        flexDirection: 'row', justifyContent: 'space-between', flex: 1, // borderStyle: 'solid',
-        // borderColor: '#007AFF',
-        // borderWidth: 1,
-        gap: 12, marginBottom: 12, borderBottomWidth: 1,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     downContainer: {
         flex: 6,
