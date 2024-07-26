@@ -1,9 +1,12 @@
 import {useState} from 'react'
-import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TextInput, View} from 'react-native';
+import {GoalItem} from './components/goalItem';
+import CustomButton from './components/customButton';
+import GoalInput from './components/goalInput';
 
 export default function App() {
     const [goal, setGoal] = useState('');
-    const [arr, setArr] = useState([]);
+    const [courseGoals, setCourseGoals] = useState([]);
 
 
     const goalInputHandler = (text) => {
@@ -12,101 +15,56 @@ export default function App() {
     }
 
     const goalAddHandler = () => {
-        setArr((currentGoals) => [...currentGoals, goal]);
+        if (goal.trim().length === 0) return; // Prevent adding empty goals
+        setCourseGoals(currentGoals => [...currentGoals, goal]);
+        setGoal(''); // Clear the input after adding the goal
     }
 
-    return (
-        <View style={styles.appContainer}>
-            <View style={styles.upperContainer}>
-                <View style={styles.inputContainer}>
-                    <TextInput placeholder={'Your course goal!'} style={styles.input} onChangeText={goalInputHandler}/>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.btn} onPress={goalAddHandler}>
-                        <Text style={styles.btnText}>Add Goal</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.downContainer}>
-                {arr.length > 0 ? (
-                    <FlatList
-                        data={arr}
-                        renderItem={({item}) => <Text style={styles.dummyText}>{item}</Text>}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                ) : (
-                    <Text style={styles.dummyText}>No goals added yet.</Text>
-                )}
-            </View>
+    return (<View style={styles.appContainer}>
+        <View style={styles.upperContainer}>
+            <GoalInput goal={goal} goalInputHandler={goalInputHandler}/>
+            <CustomButton clickHandler={goalAddHandler}/>
         </View>
-    );
+        <View style={styles.downContainer}>
+            {courseGoals.length > 0 ? (
+                <FlatList
+                    data={courseGoals}
+                    renderItem={itemData => (<GoalItem itemData={itemData}/>)}
+                    // if we have item like obj {text: 'bla-bla', id: '343s-45aa-67ff'}
+                    // we can extract key by return item.id
+                    keyExtractor={(item, index) => index.toString()}
+                />
+            ) : (
+                <View><Text style={styles.dummyItem}>No goals added yet.</Text></View>
+            )}
+            {/*{courseGoals.length > 0 ? (*/}
+            {/*    <ScrollView>*/}
+            {/*        {courseGoals.map((goal, idx) => (*/}
+            {/*            <View key={idx} style={styles.dummyItem}>*/}
+            {/*                <Text style={styles.dummyText}>{goal}</Text>*/}
+            {/*            </View>*/}
+            {/*        ))}*/}
+            {/*    </ScrollView>*/}
+            {/*) : (*/}
+            {/*    <View>*/}
+            {/*        <Text style={styles.dummyItem}>No goals added yet.</Text>*/}
+            {/*    </View>*/}
+            {/*)}*/}
+        </View>
+    </View>);
 }
 
 const styles = StyleSheet.create({
     appContainer: {
-        paddingTop: 35,
-        paddingHorizontal: 12,
-        backgroundColor: '#cccccc',
-        flex: 1,
+        paddingTop: 35, paddingHorizontal: 12, backgroundColor: '#cccccc', flex: 1,
     },
     upperContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flex: 1,
-        // borderStyle: 'solid',
+        flexDirection: 'row', justifyContent: 'space-between', flex: 1, // borderStyle: 'solid',
         // borderColor: '#007AFF',
         // borderWidth: 1,
-        gap: 12,
-        marginBottom: 12,
-        borderBottomWidth: 1,
-    },
-    inputContainer: {
-        flex: 6,
-        height: '100%',
-        justifyContent: 'center',
-    },
-    buttonContainer: {
-        flex: 4,
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
+        gap: 12, marginBottom: 12, borderBottomWidth: 1,
     },
     downContainer: {
         flex: 6,
-    },
-    input: {
-        width: 'auto',
-        borderColor: '#007AFF',
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: 10,
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-    dummyText: {
-        fontSize: 22,
-        fontWeight: '600',
-    },
-    btn: {
-        width: '100%',
-        backgroundColor: 'rgba(35,116,237,0.9)',
-        paddingVertical: 10,
-        paddingHorizontal: 22,
-        borderRadius: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-    },
-    btnText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: '600',
-    },
+    }
 });
