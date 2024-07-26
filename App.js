@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Button, FlatList, StyleSheet, View} from 'react-native';
 import {GoalItem} from './components/goalItem';
 import GoalInput from './components/goalInput';
 

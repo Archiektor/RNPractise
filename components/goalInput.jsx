@@ -32,7 +32,7 @@ const GoalInput = ({goalAddHandler, isVisible, closeModalHandler}) => {
                     <TouchableOpacity style={[styles.btn, styles.flex2]} onPress={addGoalHandler}>
                         <Text style={styles.btnText}>Add Goal</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.btn, styles.flex1, styles.btnCancel]} onPress={closeModalHandler}>
+                    <TouchableOpacity style={[styles.btn, styles.flex1, styles.btnCancel]} onPress={cancelGoalHandler}>
                         <Text style={styles.btnText}>X</Text>
                     </TouchableOpacity>
                 </View>
